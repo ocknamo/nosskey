@@ -1,0 +1,23 @@
+{
+  "name": "nosskey",
+  "version": "0.0.0",
+  "description": "Nossky challenges better ways to handle Nostr keys",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "start-all": "npm run start -w register-server & npm run start -w web-client",
+    "kill-all": "killall -9 node"
+  },
+  "author": "ocknamo",
+  "license": "MIT",
+  "workspaces": [
+    "package/auth-relay",
+    "package/web-client",
+    "package/register-server",
+    "package/shared"
+  ],
+  "dependencies": {
+    "@github/webauthn-json": "^2.1.1"
+  }
+}
