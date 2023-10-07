@@ -1,0 +1,11 @@
+{
+  "name": "auth-relay",
+  "version": "0.0.0",
+  "description": "fido2 auth relay",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\""
+  },
+  "author": "ocknamo",
+  "license": "MIT"
+}
