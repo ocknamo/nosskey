@@ -1,0 +1,17 @@
+version: '3.3'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: db
+    env_file: ./mysql/env/.env_test
+    ports:
+      - "3307:3306"
+
+  redis:
+    image: redis:7.2.1-alpine3.18
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - "./data/redis:/data"

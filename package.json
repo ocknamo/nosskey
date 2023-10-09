@@ -7,7 +7,9 @@
     "test": "npm run test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
     "start-all": "npm run start -w register-server & npm run start -w web-client",
-    "kill-all": "killall -9 node"
+    "kill-all": "killall -9 node",
+    "docker:up": "docker compose -f ./docker/docker-compose.yml up -d",
+    "docker:down": "docker compose -f ./docker/docker-compose.yml down"
   },
   "author": "ocknamo",
   "license": "MIT",

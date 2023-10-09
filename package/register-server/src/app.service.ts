@@ -21,7 +21,6 @@ export class AppService {
       cryptoParams: [-7, -257],
       authenticatorAttachment: 'cross-platform',
       authenticatorRequireResidentKey: false,
-      // authenticatorUserVerification: 'preferred'
     });
   }
 
