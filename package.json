@@ -6,6 +6,7 @@
   "scripts": {
     "test": "npm run test --workspaces --if-present",
     "build": "npm run build --workspaces --if-present",
+    "format": "npm run format --workspaces --if-present",
     "start-all": "npm run start -w register-server & npm run start -w web-client",
     "kill-all": "killall -9 node",
     "docker:up": "docker compose -f ./docker/docker-compose.yml up -d",

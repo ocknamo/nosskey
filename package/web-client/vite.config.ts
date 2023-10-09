@@ -8,7 +8,7 @@ export default defineConfig({
 	},
 	build: {
 		rollupOptions: {
-			external: ["shared"]
+			external: ['shared']
 		}
 	}
 });

@@ -1,40 +1,56 @@
-import {
-  create,
-  parseCreationOptionsFromJSON,
-} from "@github/webauthn-json/browser-ponyfill";
-import type { PublicKeyCredentialCreationOptionsJSON } from "@github/webauthn-json/dist/types/basic/json";
+import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill';
+import type {
+	PublicKeyCredentialCreationOptionsJSON,
+	PublicKeyCredentialWithAttestationJSON
+} from '@github/webauthn-json/dist/types/basic/json';
 
 export class Register {
-  // TODO: set from config
-  baseUrl = 'http://localhost:3333/';
+	// TODO: set from config
+	baseUrl = 'http://localhost:3333/';
 
-  constructor(private readonly email: string, private readonly password: string) {}
+	registId = '';
 
-  async registerStart(): Promise<boolean> {
+	constructor(private readonly email: string, private readonly password: string) {}
 
-    const options = await this.fetchOptions();
-    // const options = parseCreationOptionsFromJSON({ publicKey: options});
-    // const response = await create(options);
-   const res = await create(parseCreationOptionsFromJSON({ publicKey: options}))
-    // await navigator.credentials.create({ publicKey: options});
+	async registerStart(): Promise<boolean> {
+		const options = await this.fetchOptions();
 
-    console.log(res);
+		const res = await create(parseCreationOptionsFromJSON({ publicKey: options }));
 
-    return false;
-  }
+		await this.postSign(res.toJSON());
 
-  private async fetchOptions(): Promise<PublicKeyCredentialCreationOptionsJSON> {
-    // TODO: API
-    const postReq = new Request(this.baseUrl + 'register-start', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-          email: this.email,
-          npub: 'mocknpub',
-        })
-    });
-    const res = await (await fetch(postReq)).json();
+		return false;
+	}
 
-    return res as PublicKeyCredentialCreationOptionsJSON;
-  }
+	private async fetchOptions(): Promise<PublicKeyCredentialCreationOptionsJSON> {
+		const postReq = new Request(this.baseUrl + 'register-start', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				email: this.email,
+				npub: 'mocknpub'
+			})
+		});
+		const { id, option } = (await (await fetch(postReq)).json()) as {
+			id: string;
+			option: PublicKeyCredentialCreationOptionsJSON;
+		};
+
+		this.registId = id;
+
+		return option;
+	}
+
+	private async postSign(attestation: PublicKeyCredentialWithAttestationJSON): Promise<boolean> {
+		const postReq = new Request(this.baseUrl + 'register-complete', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				id: this.registId,
+				attestation
+			})
+		});
+
+		return (await fetch(postReq)).json();
+	}
 }

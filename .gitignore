@@ -130,4 +130,4 @@ dist
 .pnp.*
 
 # docker
-.docker/data/redis
+docker/data/redis
