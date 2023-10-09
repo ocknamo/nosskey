@@ -15,8 +15,10 @@ export class Register {
     const options = await this.fetchOptions();
     // const options = parseCreationOptionsFromJSON({ publicKey: options});
     // const response = await create(options);
-    create(parseCreationOptionsFromJSON({ publicKey: options}))
+   const res = await create(parseCreationOptionsFromJSON({ publicKey: options}))
     // await navigator.credentials.create({ publicKey: options});
+
+    console.log(res);
 
     return false;
   }

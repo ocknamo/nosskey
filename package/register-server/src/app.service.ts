@@ -19,8 +19,9 @@ export class AppService {
       challengeSize: 128,
       attestation: "none",
       cryptoParams: [-7, -257],
-      authenticatorAttachment: "platform",
+      authenticatorAttachment: 'cross-platform',
       authenticatorRequireResidentKey: false,
+      // authenticatorUserVerification: 'preferred'
     });
   }
 
