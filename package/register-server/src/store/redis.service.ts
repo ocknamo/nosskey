@@ -5,12 +5,14 @@ enum KeyPrefix {
   challenge = 'challenge',
 }
 
+const challengeEx = 180;
+
 @Injectable()
 export class RedisService {
   private redis = new IORedis();
 
   setChallenge(id: string, value: string): Promise<'OK'> {
-    return this.redis.set(`${KeyPrefix.challenge}:${id}`, value, 'EX', 180);
+    return this.redis.set(`${KeyPrefix.challenge}:${id}`, value, 'EX', challengeEx);
   }
 
   getChallenge(id: string): Promise<string> {
