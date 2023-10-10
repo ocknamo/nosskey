@@ -15,10 +15,10 @@
   "author": "ocknamo",
   "license": "MIT",
   "workspaces": [
+    "package/shared",
     "package/auth-relay",
     "package/web-client",
-    "package/register-server",
-    "package/shared"
+    "package/register-server"
   ],
   "dependencies": {
     "@github/webauthn-json": "^2.1.1"
