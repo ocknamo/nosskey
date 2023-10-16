@@ -4,9 +4,11 @@
   "description": "common",
   "main": "dist/index.js",
   "type": "module",
-  "devDependencies": {},
+  "devDependencies": {
+    "vitest": "^0.34.6"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\"",
+    "test": "vitest run",
     "build": "tsc",
     "init": "tsc --init"
   },

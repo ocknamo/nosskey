@@ -1,18 +1,15 @@
 import {
   Body,
   Controller,
-  Get,
   Header,
-  Headers,
   HttpCode,
-  HttpStatus,
   Options,
   Post,
 } from '@nestjs/common';
 import { AppService } from './app.service';
 import {
-  RegisterCompleteDto,
-  RegisterStartDto,
+  RegisterCompleteRequestDto,
+  RegisterStartRequestDto,
   RegisterStartResponseDto,
 } from './app.dto';
 
@@ -24,7 +21,7 @@ export class AppController {
   @Header('Access-Control-Allow-Origin', '*') // FIXME
   @Header('Access-Control-Allow-Headers', 'Content-Type')
   async registerStart(
-    @Body() body: RegisterStartDto,
+    @Body() body: RegisterStartRequestDto,
   ): Promise<RegisterStartResponseDto> {
     return this.appService.registerStart(body);
   }
@@ -32,7 +29,9 @@ export class AppController {
   @Post('register-complete')
   @Header('Access-Control-Allow-Origin', '*') // FIXME
   @Header('Access-Control-Allow-Headers', 'Content-Type')
-  async registerCompelete(@Body() body: RegisterCompleteDto): Promise<boolean> {
+  async registerCompelete(
+    @Body() body: RegisterCompleteRequestDto,
+  ): Promise<boolean> {
     return this.appService.registerComplete(body);
   }
 

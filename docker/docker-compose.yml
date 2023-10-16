@@ -6,7 +6,7 @@ services:
     container_name: db
     env_file: ./mysql/env/.env_test
     ports:
-      - "3307:3306"
+      - "3306:3306"
 
   redis:
     image: redis:7.2.1-alpine3.18

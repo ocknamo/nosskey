@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterCompleteDto, RegisterStartDto } from './app.dto';
+import { RegisterCompleteRequestDto, RegisterStartRequestDto } from './app.dto';
 import { Fido2Lib } from 'fido2-lib';
 import {
   base64urlToBuffer,
@@ -33,15 +33,17 @@ export class AppService {
   }
 
   async registerStart(
-    body: RegisterStartDto,
+    body: RegisterStartRequestDto,
   ): Promise<{ id: string; option: PublicKeyCredentialCreationOptionsJSON }> {
     const registerOption = await this.f2l.attestationOptions();
 
+    const username = body.npub;
+
     // FIXME
     // should be base64url string
-    registerOption.user.id = body.npub;
-    registerOption.user.name = body.npub;
-    registerOption.user.displayName = body.npub;
+    registerOption.user.id = username;
+    registerOption.user.name = username;
+    registerOption.user.displayName = username;
 
     const strChallenge = bufferToBase64url(registerOption.challenge);
 
@@ -50,12 +52,15 @@ export class AppService {
     await this.redis.setChallenge(tmpId, strChallenge);
 
     // TODO: use convert function of webauthn-json
-    const stringifyOption = { ...registerOption, challenge: strChallenge };
+    const stringifyOption: PublicKeyCredentialCreationOptionsJSON = {
+      ...registerOption,
+      challenge: strChallenge,
+    };
 
     return { id: tmpId, option: stringifyOption };
   }
 
-  async registerComplete(body: RegisterCompleteDto): Promise<boolean> {
+  async registerComplete(body: RegisterCompleteRequestDto): Promise<boolean> {
     const { id, attestation } = body;
 
     const challenge = await this.redis.getChallenge(id);

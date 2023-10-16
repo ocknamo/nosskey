@@ -2,18 +2,24 @@ import {
   PublicKeyCredentialCreationOptionsJSON,
   PublicKeyCredentialWithAttestationJSON,
 } from '@github/webauthn-json/dist/types/basic/json';
+import {
+  RegisterCompleteRequest,
+  RegisterStartRequest,
+  RegisterStartResponse,
+} from 'shared';
 
-export class RegisterStartDto {
+export class RegisterStartRequestDto implements RegisterStartRequest {
   mail: string;
   npub: string;
+  userName: string;
 }
 
-export class RegisterStartResponseDto {
+export class RegisterStartResponseDto implements RegisterStartResponse {
   id: string;
   option: PublicKeyCredentialCreationOptionsJSON;
 }
 
-export class RegisterCompleteDto {
+export class RegisterCompleteRequestDto implements RegisterCompleteRequest {
   id: string;
   attestation: PublicKeyCredentialWithAttestationJSON;
 }

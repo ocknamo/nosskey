@@ -22,6 +22,6 @@ export function getRandomBase64Url(digit: number = 12): string {
  * @param base64
  * @returns base64url string
  */
-function base642base64url(base64: string): string {
-  return base64.replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
+export function base642base64url(base64: string): string {
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
 }
