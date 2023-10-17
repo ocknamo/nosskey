@@ -1,8 +1,9 @@
 import { PublicKeyCredentialCreationOptionsJSON, PublicKeyCredentialWithAttestationJSON } from "@github/webauthn-json/dist/types/basic/json";
 
 export interface RegisterStartRequest {
-  mail: string;
+  email: string;
   npub: string;
+  encrptoNsec: string;
   userName: string;
 }
 

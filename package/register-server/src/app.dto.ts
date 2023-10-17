@@ -9,8 +9,9 @@ import {
 } from 'shared';
 
 export class RegisterStartRequestDto implements RegisterStartRequest {
-  mail: string;
+  email: string;
   npub: string;
+  encrptoNsec: string;
   userName: string;
 }
 

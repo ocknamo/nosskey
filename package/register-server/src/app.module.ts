@@ -17,6 +17,7 @@ import { Fido2Credential, Mail, NostrAccount } from './model';
       entities: [Fido2Credential, Mail, NostrAccount],
       synchronize: true, // only develop
     }),
+    TypeOrmModule.forFeature([Fido2Credential, Mail, NostrAccount]),
   ],
   controllers: [AppController],
   providers: [AppService, RedisService],

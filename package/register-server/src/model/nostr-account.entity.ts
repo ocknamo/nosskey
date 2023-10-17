@@ -12,7 +12,7 @@ import { Fido2Credential } from './fido2-credential.entity';
 @Entity()
 export class NostrAccount {
   @PrimaryGeneratedColumn()
-  private id: number;
+  id: number;
 
   @Index()
   @Column('varchar', {
@@ -20,7 +20,7 @@ export class NostrAccount {
     comment: 'user uuid',
   })
   @Generated('uuid')
-  private userId: string;
+  userId: string;
 
   @Column('varchar', {
     unique: true,
@@ -31,11 +31,11 @@ export class NostrAccount {
   @Column('varchar')
   npub: string;
 
-  @Column()
+  @Column({ default: '' })
   encrptoNsec: string;
 
-  @Column({ default: false })
-  disabled: boolean;
+  @Column({ default: 'INIT', comment: 'INIT or ACTIVE or INACTIVE' })
+  status: string;
 
   @OneToMany((type) => Mail, (mail) => mail.nostrAccount)
   readonly mails: Mail[];

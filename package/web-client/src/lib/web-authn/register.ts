@@ -10,7 +10,11 @@ export class Register {
 
 	registId = '';
 
-	constructor(private readonly email: string, private readonly password: string) {}
+	constructor(
+		private readonly email: string,
+		private readonly userName: string,
+		private readonly password: string
+	) {}
 
 	async registerStart(): Promise<boolean> {
 		const options = await this.fetchOptions();
@@ -28,7 +32,9 @@ export class Register {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				email: this.email,
-				npub: 'mocknpub'
+				npub: 'mocknpub',
+				encrptoNsec: 'mockcrptnsec',
+				userName: this.userName
 			})
 		});
 		const { id, option } = (await (await fetch(postReq)).json()) as {

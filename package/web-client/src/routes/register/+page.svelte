@@ -3,6 +3,7 @@
 	import { Register } from "$lib/web-authn/register";
 
 	let email = '';
+	let userName = '';
 	let password = '';
 
 	async function cratePassword() {
@@ -16,7 +17,7 @@
 
 	function submit() {
 		// TODO: note password dialog open here!
-		const reg =  new Register(email, password);
+		const reg =  new Register(email, userName, password);
 		reg.registerStart();
 	}
 </script>
@@ -32,6 +33,8 @@
 	</h1>
 
 	<form>
+		<label for="userName">user name</label>
+			<input on:focusin={cratePassword} bind:value={userName} type="text" name="user_name" id="userName">
 		<label for="email">email</label>
 			<input on:focusin={cratePassword} bind:value={email} type="email" name="user_email" id="email">
 		<label for="pass">auto generated password</label>

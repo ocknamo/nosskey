@@ -8,6 +8,9 @@ import {
 import { PublicKeyCredentialCreationOptionsJSON } from '@github/webauthn-json/dist/types/basic/json';
 import { randomUUID } from 'crypto';
 import { RedisService } from './store/redis.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Fido2Credential, Mail, NostrAccount } from './model';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class AppService {
@@ -16,7 +19,15 @@ export class AppService {
   // TODO: Set from config.
   rpId = 'localhost';
 
-  constructor(private readonly redis: RedisService) {
+  constructor(
+    @InjectRepository(Fido2Credential)
+    private credentialsRepository: Repository<Fido2Credential>,
+    @InjectRepository(Mail)
+    private mailsRepository: Repository<Mail>,
+    @InjectRepository(NostrAccount)
+    private nostrAccountsRepository: Repository<NostrAccount>,
+    private readonly redis: RedisService,
+  ) {
     // TODO: Set from config.
     this.f2l = new Fido2Lib({
       timeout: 180000,
@@ -37,19 +48,34 @@ export class AppService {
   ): Promise<{ id: string; option: PublicKeyCredentialCreationOptionsJSON }> {
     const registerOption = await this.f2l.attestationOptions();
 
-    const username = body.npub;
-
-    // FIXME
-    // should be base64url string
-    registerOption.user.id = username;
-    registerOption.user.name = username;
-    registerOption.user.displayName = username;
+    // TODO: check uniqueness of the userName.
+    registerOption.user.id = body.userName;
+    registerOption.user.name = body.userName;
+    registerOption.user.displayName = body.userName;
 
     const strChallenge = bufferToBase64url(registerOption.challenge);
 
+    let account = new NostrAccount();
+    account.npub = body.npub;
+    account.userName = body.userName;
+    account.encrptoNsec = body.encrptoNsec;
+
+    // TODO: Use transaction.
+    account = await this.nostrAccountsRepository.save(account);
+
+    const mail = new Mail();
+    mail.nostrAccountUserId = account.userId;
+    mail.mail = body.email;
+    mail.disabled = true;
+
+    await this.mailsRepository.save(mail);
+
     const tmpId = randomUUID();
 
-    await this.redis.setChallenge(tmpId, strChallenge);
+    await Promise.all([
+      this.redis.setChallenge(tmpId, strChallenge),
+      this.redis.setUserId(tmpId, account.userId),
+    ]);
 
     // TODO: use convert function of webauthn-json
     const stringifyOption: PublicKeyCredentialCreationOptionsJSON = {
@@ -62,8 +88,10 @@ export class AppService {
 
   async registerComplete(body: RegisterCompleteRequestDto): Promise<boolean> {
     const { id, attestation } = body;
-
-    const challenge = await this.redis.getChallenge(id);
+    const [challenge, userId] = await Promise.all([
+      this.redis.getChallenge(id),
+      this.redis.getUserId(id),
+    ]);
 
     const rawAttestation = {
       ...attestation,
@@ -79,9 +107,32 @@ export class AppService {
       factor: 'first',
     });
 
-    // TODO: save publicKey and counter from regResult to user's info for future authentication calls into db
-    console.log('Fido2AttestationResult');
-    console.log(result);
+    const publicKey = result.authnrData.get('credentialPublicKeyPem');
+    const counter = result.authnrData.get('counter');
+    const credIdBuf = result.authnrData.get('credId') as ArrayBuffer;
+    const credId = bufferToBase64url(credIdBuf);
+
+    // TODO: use transaction and remove Account and Mail when fail.
+    const account = await this.nostrAccountsRepository.findOneOrFail({
+      where: { userId },
+    });
+    account.status = 'ACTIVE';
+    await this.nostrAccountsRepository.save(account);
+
+    const mail = await this.mailsRepository.findOneOrFail({
+      where: { nostrAccountUserId: userId },
+    });
+    mail.disabled = false;
+    await this.mailsRepository.save(mail);
+
+    const credential = new Fido2Credential();
+
+    credential.publicKey = publicKey;
+    credential.counter = counter;
+    credential.nostrAccountUserId = userId;
+    credential.credentialId = credId;
+
+    await this.credentialsRepository.save(credential);
 
     return true;
   }
