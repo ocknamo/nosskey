@@ -27,10 +27,4 @@ export class Fido2Credential {
 
   @Column({ default: false })
   disabled: boolean;
-
-  @ManyToOne(
-    (type) => NostrAccount,
-    (nostrAccount) => nostrAccount.fido2Credentials,
-  )
-  readonly nostrAccount: NostrAccount;
 }

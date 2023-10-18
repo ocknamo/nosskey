@@ -37,12 +37,6 @@ export class NostrAccount {
   @Column({ default: 'INIT', comment: 'INIT or ACTIVE or INACTIVE' })
   status: string;
 
-  @OneToMany((type) => Mail, (mail) => mail.nostrAccount)
-  readonly mails: Mail[];
-
-  @OneToMany(
-    (type) => Fido2Credential,
-    (fido2Credential) => fido2Credential.nostrAccount,
-  )
-  readonly fido2Credentials: Fido2Credential[];
+  @Column({ default: false })
+  disabled: boolean;
 }

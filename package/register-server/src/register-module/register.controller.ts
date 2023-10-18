@@ -6,16 +6,16 @@ import {
   Options,
   Post,
 } from '@nestjs/common';
-import { AppService } from './app.service';
+import { RegisterService } from './register.service';
 import {
   RegisterCompleteRequestDto,
   RegisterStartRequestDto,
   RegisterStartResponseDto,
-} from './app.dto';
+} from './register.dto';
 
 @Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+export class RegisterController {
+  constructor(private readonly registerService: RegisterService) {}
 
   @Post('register-start')
   @Header('Access-Control-Allow-Origin', '*') // FIXME
@@ -23,7 +23,7 @@ export class AppController {
   async registerStart(
     @Body() body: RegisterStartRequestDto,
   ): Promise<RegisterStartResponseDto> {
-    return this.appService.registerStart(body);
+    return this.registerService.registerStart(body);
   }
 
   @Post('register-complete')
@@ -32,7 +32,7 @@ export class AppController {
   async registerCompelete(
     @Body() body: RegisterCompleteRequestDto,
   ): Promise<boolean> {
-    return this.appService.registerComplete(body);
+    return this.registerService.registerComplete(body);
   }
 
   /**

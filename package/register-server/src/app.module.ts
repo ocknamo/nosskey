@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { RedisService } from './store/redis.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Fido2Credential, Mail, NostrAccount } from './model';
+import { RegisterModule } from './register-module/register.module';
 
 @Module({
   imports: [
+    RegisterModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -17,9 +16,6 @@ import { Fido2Credential, Mail, NostrAccount } from './model';
       entities: [Fido2Credential, Mail, NostrAccount],
       synchronize: true, // only develop
     }),
-    TypeOrmModule.forFeature([Fido2Credential, Mail, NostrAccount]),
   ],
-  controllers: [AppController],
-  providers: [AppService, RedisService],
 })
 export class AppModule {}

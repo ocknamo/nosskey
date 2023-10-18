@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterCompleteRequestDto, RegisterStartRequestDto } from './app.dto';
 import { Fido2Lib } from 'fido2-lib';
 import {
   base64urlToBuffer,
@@ -7,13 +6,17 @@ import {
 } from '@github/webauthn-json/extended';
 import { PublicKeyCredentialCreationOptionsJSON } from '@github/webauthn-json/dist/types/basic/json';
 import { randomUUID } from 'crypto';
-import { RedisService } from './store/redis.service';
+import { RedisService } from '../store/redis.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Fido2Credential, Mail, NostrAccount } from './model';
+import { Fido2Credential, Mail, NostrAccount } from '../model';
 import { Repository } from 'typeorm';
+import {
+  RegisterCompleteRequestDto,
+  RegisterStartRequestDto,
+} from './register.dto';
 
 @Injectable()
-export class AppService {
+export class RegisterService {
   f2l: Fido2Lib;
 
   // TODO: Set from config.

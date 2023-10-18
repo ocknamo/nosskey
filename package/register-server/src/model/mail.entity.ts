@@ -21,7 +21,4 @@ export class Mail {
 
   @Column({ default: false })
   disabled: boolean;
-
-  @ManyToOne((type) => NostrAccount, (nostrAccount) => nostrAccount.mails)
-  nostrAccount: NostrAccount;
 }
