@@ -33,4 +33,8 @@ export class RedisService {
   getUserId(id: string): Promise<string> {
     return this.redis.get(`${KeyPrefix.userId}:${id}`);
   }
+
+  close(): void {
+    this.redis.disconnect(false);
+  }
 }

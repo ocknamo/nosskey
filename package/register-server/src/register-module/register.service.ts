@@ -15,6 +15,10 @@ import {
   RegisterStartRequestDto,
 } from './register.dto';
 
+/**
+ * TODO:
+ * - Lack of email authentication process.
+ */
 @Injectable()
 export class RegisterService {
   f2l: Fido2Lib;

@@ -33,6 +33,12 @@ describe('RegisterController', () => {
     }).compile();
   });
 
+  afterAll(async () => {
+    redis.close();
+    await db.destroy();
+    await app.close();
+  });
+
   describe('getHello', () => {
     it('should return "Hello World!"', () => {
       const appController = app.get(RegisterController);
