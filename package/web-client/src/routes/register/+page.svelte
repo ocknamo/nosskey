@@ -17,8 +17,8 @@
 
 	function submit() {
 		// TODO: note password dialog open here!
-		const reg =  new Register(email, userName, password);
-		reg.registerStart();
+		const reg =  new Register(email, userName);
+		reg.registerStart(password);
 	}
 </script>
 

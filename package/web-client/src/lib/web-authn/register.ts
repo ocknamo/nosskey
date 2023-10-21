@@ -1,3 +1,4 @@
+import { WebCrypto } from '$lib/web-crypto/web-crypto';
 import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill';
 import type {
 	PublicKeyCredentialCreationOptionsJSON,
@@ -10,13 +11,13 @@ export class Register {
 
 	registId = '';
 
-	constructor(
-		private readonly email: string,
-		private readonly userName: string,
-		private readonly password: string
-	) {}
+	constructor(private readonly email: string, private readonly userName: string) {}
 
-	async registerStart(): Promise<boolean> {
+	async registerStart(password: string): Promise<boolean> {
+		console.time('[Register] registerStart: WebCrypto.getPasswordHash');
+		const passHash = await WebCrypto.getPasswordHash(password);
+		console.timeEnd('[Register] registerStart: WebCrypto.getPasswordHash');
+
 		const options = await this.fetchOptions();
 
 		const res = await create(parseCreationOptionsFromJSON({ publicKey: options }));
