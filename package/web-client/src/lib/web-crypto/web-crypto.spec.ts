@@ -13,7 +13,9 @@ describe('WebCrypto', () => {
 	});
 
 	it('should get password hash', async () => {
-		const res = await WebCrypto.getPasswordHash('9MP0pTNnaAdb');
+		const res = await WebCrypto.getKeyHash('9MP0pTNnaAdb');
+
 		expect(res).toBeDefined();
+		expect(res).toBeInstanceOf(ArrayBuffer);
 	});
 });

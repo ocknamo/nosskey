@@ -2,11 +2,11 @@ import { base64urlToBuffer, bufferToBase64url } from '@github/webauthn-json/exte
 
 export class WebCrypto {
 	/**
-	 * Get hashed password.
-	 * @param pass base64url // FIXME
+	 * Get hashed key from original key.
+	 * @param key base64url only
 	 */
-	static getPasswordHash(password: string): Promise<string> {
-		return this.stretching(base64urlToBuffer(password)).then((v) => bufferToBase64url(v));
+	static getKeyHash(key: string): Promise<ArrayBuffer> {
+		return this.stretching(base64urlToBuffer(key));
 	}
 
 	/**
@@ -16,7 +16,7 @@ export class WebCrypto {
 	 * @param count default 10000
 	 * @returns
 	 */
-	static async stretching(src: ArrayBuffer, count: number = 10000): Promise<ArrayBuffer> {
+	private static async stretching(src: ArrayBuffer, count: number = 10000): Promise<ArrayBuffer> {
 		let data = src;
 		let i = count;
 
@@ -34,15 +34,31 @@ export class WebCrypto {
 	 * @param data source
 	 * @returns hased data
 	 */
-	static hash(data: ArrayBuffer): Promise<ArrayBuffer> {
+	private static hash(data: ArrayBuffer): Promise<ArrayBuffer> {
 		return window.crypto.subtle.digest('SHA-256', data);
 	}
 
 	/**
-	 * TODO: 暗号化
+	 * encrypt AES-GCM
 	 */
+	static async encrypt(src: ArrayBuffer, key: ArrayBuffer, iv: Uint8Array): Promise<ArrayBuffer> {
+		const cryptoKey = await window.crypto.subtle.importKey('raw', key, 'AES-GCM', false, [
+			'encrypt',
+			'decrypt'
+		]);
+
+		return window.crypto.subtle.encrypt({ name: 'AES-GCM', iv }, cryptoKey, src);
+	}
 
 	/**
-	 * NOTE: saltは不要？
+	 * decryot encrypt AES-GCM
 	 */
+	static async decrypt(src: ArrayBuffer, key: ArrayBuffer, iv: Uint8Array): Promise<ArrayBuffer> {
+		const cryptoKey = await window.crypto.subtle.importKey('raw', key, 'AES-GCM', false, [
+			'encrypt',
+			'decrypt'
+		]);
+
+		return window.crypto.subtle.decrypt({ name: 'AES-GCM', iv }, cryptoKey, src);
+	}
 }
