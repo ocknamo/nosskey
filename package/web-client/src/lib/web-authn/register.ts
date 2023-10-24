@@ -1,3 +1,4 @@
+import { Strage } from '$lib/storage/strage';
 import { WebCrypto } from '$lib/web-crypto/web-crypto';
 import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill';
 import type {
@@ -10,19 +11,31 @@ export class Register {
 	baseUrl = 'http://localhost:3333/';
 
 	registId = '';
+	email = '';
+	userName = '';
 
-	constructor(private readonly email: string, private readonly userName: string) {}
+	constructor() {}
 
-	async registerStart(password: string): Promise<boolean> {
-		console.time('[Register] registerStart: WebCrypto.getPasswordHash');
-		const passHash = await WebCrypto.getPasswordHash(password);
-		console.timeEnd('[Register] registerStart: WebCrypto.getPasswordHash');
+	async registerStart(email: string, userName: string, encryptionKey: string): Promise<boolean> {
+		this.email = email;
+		this.userName = userName;
+
+		// TODO: create nsec and npub and store to strage.
+
+		console.time('[Register] registerStart: WebCrypto.getKeyHash');
+		const passHash = await WebCrypto.getKeyHash(encryptionKey);
+		console.timeEnd('[Register] registerStart: WebCrypto.getKeyHash');
 
 		const options = await this.fetchOptions();
 
 		const res = await create(parseCreationOptionsFromJSON({ publicKey: options }));
 
 		await this.postSign(res.toJSON());
+
+		const strage = new Strage();
+
+		// success
+		strage.setEncryptionKey(encryptionKey);
 
 		return false;
 	}
