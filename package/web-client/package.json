@@ -13,7 +13,8 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"dependencies": {
-		"@github/webauthn-json": "^2.1.1"
+		"@github/webauthn-json": "^2.1.1",
+		"nostr-tools": "^1.17.0"
 	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",

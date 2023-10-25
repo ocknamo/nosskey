@@ -11,7 +11,7 @@ import {
 export class RegisterStartRequestDto implements RegisterStartRequest {
   email: string;
   npub: string;
-  encrptoNsec: string;
+  encryptNsec: string;
   userName: string;
 }
 

@@ -3,7 +3,7 @@ import { PublicKeyCredentialCreationOptionsJSON, PublicKeyCredentialWithAttestat
 export interface RegisterStartRequest {
   email: string;
   npub: string;
-  encrptoNsec: string;
+  encryptNsec: string;
   userName: string;
 }
 

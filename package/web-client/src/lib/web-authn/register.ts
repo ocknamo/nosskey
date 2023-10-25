@@ -1,3 +1,4 @@
+import { EncryptionKeyService } from '$lib/encryption-key-service/encryption-key.service';
 import { Strage } from '$lib/storage/strage';
 import { WebCrypto } from '$lib/web-crypto/web-crypto';
 import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill';
@@ -5,6 +6,7 @@ import type {
 	PublicKeyCredentialCreationOptionsJSON,
 	PublicKeyCredentialWithAttestationJSON
 } from '@github/webauthn-json/dist/types/basic/json';
+import { generatePrivateKey, getPublicKey, nip19 } from 'nostr-tools';
 
 export class Register {
 	// TODO: set from config
@@ -13,18 +15,26 @@ export class Register {
 	registId = '';
 	email = '';
 	userName = '';
+	// HEX string
+	npk = '';
+	nsk = '';
+	encryptNsk = '';
 
-	constructor() {}
+	encryptionKeyService: EncryptionKeyService;
+
+	constructor() {
+		this.encryptionKeyService = new EncryptionKeyService();
+	}
 
 	async registerStart(email: string, userName: string, encryptionKey: string): Promise<boolean> {
 		this.email = email;
 		this.userName = userName;
+		this.nsk = generatePrivateKey();
+		this.npk = getPublicKey(this.nsk);
 
-		// TODO: create nsec and npub and store to strage.
-
-		console.time('[Register] registerStart: WebCrypto.getKeyHash');
-		const passHash = await WebCrypto.getKeyHash(encryptionKey);
-		console.timeEnd('[Register] registerStart: WebCrypto.getKeyHash');
+		console.time('[Register] registerStart: encryptSecretKey');
+		this.encryptNsk = await this.encryptionKeyService.encryptSecretKey(this.nsk, encryptionKey);
+		console.timeEnd('[Register] registerStart: encryptSecretKey');
 
 		const options = await this.fetchOptions();
 
@@ -34,10 +44,13 @@ export class Register {
 
 		const strage = new Strage();
 
-		// success
+		// success and login
 		strage.setEncryptionKey(encryptionKey);
+		strage.setNpub(nip19.npubEncode(this.npk));
+		strage.setNsec(nip19.nsecEncode(this.nsk));
+		strage.setUserName(this.userName);
 
-		return false;
+		return true;
 	}
 
 	private async fetchOptions(): Promise<PublicKeyCredentialCreationOptionsJSON> {
@@ -46,8 +59,8 @@ export class Register {
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
 				email: this.email,
-				npub: 'mocknpub',
-				encrptoNsec: 'mockcrptnsec',
+				npub: nip19.npubEncode(this.npk),
+				encryptNsec: this.encryptNsk,
 				userName: this.userName
 			})
 		});

@@ -4,6 +4,22 @@ import { base64urlToBuffer, bufferToBase64url } from '@github/webauthn-json/exte
 export class EncryptionKeyService {
 	constructor() {}
 
+	async encryptSecretKey(secretKey: string, encriptionKey: string): Promise<string> {
+		const iv = window.crypto.getRandomValues(new Uint8Array(12));
+
+		const enc = await this.encrypt(secretKey, encriptionKey, iv);
+
+		return [enc, this.ivToBase64url(iv)].join('.');
+	}
+
+	decryptSecretKey(enyptedSecretKey: string, encriptionKey: string): Promise<string> {
+		const [src, ivString] = enyptedSecretKey.split('.');
+
+		const iv = this.base64urlToIv(ivString);
+
+		return this.decrypt(src, encriptionKey, iv);
+	}
+
 	async encrypt(src: string, originalKey: string, iv: Uint8Array): Promise<string> {
 		const key = await WebCrypto.getKeyHash(originalKey);
 		const srcBuf = base64urlToBuffer(src);

@@ -5,7 +5,7 @@ describe('Register', () => {
 	let service: Register;
 
 	beforeEach(() => {
-		service = new Register('test_email', 'test_username');
+		service = new Register();
 	});
 
 	it('should be exist', () => {

@@ -32,7 +32,7 @@ export class NostrAccount {
   npub: string;
 
   @Column({ default: '' })
-  encrptoNsec: string;
+  encryptNsec: string;
 
   @Column({ default: 'INIT', comment: 'INIT or ACTIVE or INACTIVE' })
   status: string;

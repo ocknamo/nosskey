@@ -4,21 +4,21 @@
 
 	let email = '';
 	let userName = '';
-	let password = '';
+	let encryptionKey = '';
 
 	async function cratePassword() {
 		for (let index = 0; index < 3; index++) {
 			await new Promise((resolve) => {
 				setTimeout(resolve, 100)
 			})
-			password = getRandomBase64Url(12);
+			encryptionKey = getRandomBase64Url(12);
 		}
 	}
 
 	function submit() {
-		// TODO: note password dialog open here!
-		const reg =  new Register(email, userName);
-		reg.registerStart(password);
+		// TODO: note encryptionKey dialog open here!
+		const reg =  new Register();
+		reg.registerStart(email, userName, encryptionKey);
 	}
 </script>
 
@@ -34,12 +34,12 @@
 
 	<form>
 		<label for="userName">user name</label>
-			<input on:focusin={cratePassword} bind:value={userName} type="text" name="user_name" id="userName">
+			<input bind:value={userName} type="text" name="user_name" id="userName">
 		<label for="email">email</label>
-			<input on:focusin={cratePassword} bind:value={email} type="email" name="user_email" id="email">
-		<label for="pass">auto generated password</label>
-			<input class="password-input" bind:value={password} type="text" name="password" id="pass" disabled>
-		<span><button class="change-password-button" on:click={cratePassword} type="button">change password</button></span>
+			<input bind:value={email} type="email" name="user_email" id="email">
+		<label for="encryptionKey">auto generated password</label>
+			<input class="password-input" bind:value={encryptionKey} type="text" name="password" id="encryptionKey" disabled>
+		<span><button class="change-password-button" on:click={cratePassword} type="button">UPDATE</button></span>
 		<button class="submit-button" on:click={submit} type="submit">Register start!</button>
 	</form>
 

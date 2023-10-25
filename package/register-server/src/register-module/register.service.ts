@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Fido2Lib } from 'fido2-lib';
 import {
   base64urlToBuffer,
@@ -56,6 +56,14 @@ export class RegisterService {
     const registerOption = await this.f2l.attestationOptions();
 
     // TODO: check uniqueness of the userName.
+    const exists = await this.nostrAccountsRepository.find({
+      where: { userName: body.userName },
+    });
+
+    if (exists.length > 0) {
+      throw new HttpException('Duplicate user name', HttpStatus.BAD_REQUEST);
+    }
+
     registerOption.user.id = body.userName;
     registerOption.user.name = body.userName;
     registerOption.user.displayName = body.userName;
@@ -65,7 +73,7 @@ export class RegisterService {
     let account = new NostrAccount();
     account.npub = body.npub;
     account.userName = body.userName;
-    account.encrptoNsec = body.encrptoNsec;
+    account.encryptNsec = body.encryptNsec;
 
     // TODO: Use transaction.
     account = await this.nostrAccountsRepository.save(account);
