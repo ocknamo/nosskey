@@ -64,7 +64,7 @@ export class RegisterService {
       throw new HttpException('Duplicate user name', HttpStatus.BAD_REQUEST);
     }
 
-    registerOption.user.id = body.userName;
+    registerOption.user.id = btoa(body.userName);
     registerOption.user.name = body.userName;
     registerOption.user.displayName = body.userName;
 
