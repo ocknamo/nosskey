@@ -1,6 +1,8 @@
 <script>
 	import { getRandomBase64Url } from "shared";
 	import { Register } from "$lib/web-authn/register";
+	import { goto } from '$app/navigation';
+	import { onMount } from "svelte";
 
 	let email = '';
 	let userName = '';
@@ -16,8 +18,6 @@
 	}
 
 	async function submit() {
-		// TODO: note encryptionKey dialog open here!
-
 		alert(`必ず暗号化キーを忘れないようにメモしてください\n Be sure to write down the encryption key so you don't forget it.\n ${encryptionKey}`)
 
 		const reg =  new Register();
@@ -25,7 +25,11 @@
 			await reg.registerStart(email, userName, encryptionKey);
 		} catch (error) {
 			alert(error.message)
+
+			return;
 		}
+
+		window.location = '/'
 	}
 </script>
 

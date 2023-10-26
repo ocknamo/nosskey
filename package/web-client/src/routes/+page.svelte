@@ -1,4 +1,15 @@
 <script>
+	import { LoginStatusService } from '$lib/login-status/login-status.service';
+	import { onMount } from 'svelte';
+
+	let loginStatusService;
+	let isLoggedIn = false;
+
+	onMount(() => {
+		loginStatusService = new LoginStatusService();
+		isLoggedIn = loginStatusService.isLoggedIn;
+	})
+
 </script>
 
 <svelte:head>
@@ -13,6 +24,12 @@
 	<h2>
 		TODO: show here nostr time line
 	</h2>
+
+	{#if isLoggedIn}
+		<p>LOGGED IN!!!!</p>
+	{/if}
+
+	
 
 </section>
 
