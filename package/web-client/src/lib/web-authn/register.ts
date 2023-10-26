@@ -64,7 +64,13 @@ export class Register {
 				userName: this.userName
 			})
 		});
-		const { id, option } = (await (await fetch(postReq)).json()) as {
+		const response = await fetch(postReq);
+
+		if (!response.ok) {
+			throw new Error((await response.json()).message);
+		}
+
+		const { id, option } = (await response.json()) as {
 			id: string;
 			option: PublicKeyCredentialCreationOptionsJSON;
 		};

@@ -15,10 +15,17 @@
 		}
 	}
 
-	function submit() {
+	async function submit() {
 		// TODO: note encryptionKey dialog open here!
+
+		alert(`必ず暗号化キーを忘れないようにメモしてください\n Be sure to write down the encryption key so you don't forget it.\n ${encryptionKey}`)
+
 		const reg =  new Register();
-		reg.registerStart(email, userName, encryptionKey);
+		try {
+			await reg.registerStart(email, userName, encryptionKey);
+		} catch (error) {
+			alert(error.message)
+		}
 	}
 </script>
 
@@ -40,7 +47,7 @@
 		<label for="encryptionKey">auto generated password</label>
 			<input class="password-input" bind:value={encryptionKey} type="text" name="password" id="encryptionKey" disabled>
 		<span><button class="change-password-button" on:click={cratePassword} type="button">UPDATE</button></span>
-		<button class="submit-button" on:click={submit} type="submit">Register start!</button>
+		<button class="submit-button" on:click={submit} type="submit" disabled={ !userName || !email || !encryptionKey  }>Register start!</button>
 	</form>
 
 </section>
