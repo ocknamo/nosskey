@@ -1,6 +1,5 @@
 import { EncryptionKeyService } from '$lib/encryption-key-service/encryption-key.service';
 import { Strage } from '$lib/storage/strage';
-import { WebCrypto } from '$lib/web-crypto/web-crypto';
 import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill';
 import type {
 	PublicKeyCredentialCreationOptionsJSON,
@@ -15,8 +14,8 @@ export class Register {
 	registId = '';
 	email = '';
 	userName = '';
-	// HEX string
-	npk = '';
+
+	npk = ''; // HEX string
 	nsk = '';
 	encryptNsk = '';
 
@@ -54,7 +53,7 @@ export class Register {
 	}
 
 	private async fetchOptions(): Promise<PublicKeyCredentialCreationOptionsJSON> {
-		const postReq = new Request(this.baseUrl + 'register-start', {
+		const postReq = new Request(this.baseUrl + 'register/start', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({
@@ -81,7 +80,7 @@ export class Register {
 	}
 
 	private async postSign(attestation: PublicKeyCredentialWithAttestationJSON): Promise<boolean> {
-		const postReq = new Request(this.baseUrl + 'register-complete', {
+		const postReq = new Request(this.baseUrl + 'register/complete', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({

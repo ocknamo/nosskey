@@ -1,5 +1,5 @@
 import { Fido2Credential, Mail, NostrAccount } from '../src/model';
-import { DataSource, EntityTarget, Repository } from 'typeorm';
+import { DataSource, EntityTarget, ObjectLiteral, Repository } from 'typeorm';
 
 export class TestDatabase {
   private dataSource: DataSource;
@@ -31,7 +31,7 @@ export class TestDatabase {
   /**
    * getRepository
    */
-  getRepository<T>(entity: EntityTarget<T>): Repository<T> {
+  getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
     return this.dataSource.getRepository(entity);
   }
 

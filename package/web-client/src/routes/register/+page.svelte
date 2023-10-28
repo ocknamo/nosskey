@@ -18,7 +18,7 @@
 	}
 
 	async function submit() {
-		alert(`必ず暗号化キーを忘れないようにメモしてください\n Be sure to write down the encryption key so you don't forget it.\n ${encryptionKey}`)
+		alert(`Write down the encryption key so you don't forget it.\n\n ${encryptionKey}`)
 
 		const reg =  new Register();
 		try {
@@ -29,7 +29,7 @@
 			return;
 		}
 
-		window.location = '/'
+		goto('/');
 	}
 </script>
 
@@ -43,7 +43,7 @@
 		Register
 	</h1>
 
-	<form>
+	<form on:submit|preventDefault={submit}>
 		<label for="userName">user name</label>
 			<input bind:value={userName} type="text" name="user_name" id="userName">
 		<label for="email">email</label>
@@ -51,7 +51,7 @@
 		<label for="encryptionKey">auto generated password</label>
 			<input class="password-input" bind:value={encryptionKey} type="text" name="password" id="encryptionKey" disabled>
 		<span><button class="change-password-button" on:click={cratePassword} type="button">UPDATE</button></span>
-		<button class="submit-button" on:click={submit} type="submit" disabled={ !userName || !email || !encryptionKey  }>Register start!</button>
+		<input value="Register start!" class="submit-button" type="submit" disabled={ !userName || !email || !encryptionKey  } />
 	</form>
 
 </section>
@@ -60,7 +60,7 @@
 	section {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
 		flex: 0.6;
 
@@ -94,15 +94,6 @@
 		background: none;
 		font-size: 1em;
 		margin-top: 8px;
-	}
-
-	.submit-button {
-		margin-top: 1em;
-		height: 3em;
-		font-size: 1.4em;
-		background-color: paleturquoise;
-		border-radius: 10px;
-		max-width: 360px;
 	}
 
 	button:disabled {

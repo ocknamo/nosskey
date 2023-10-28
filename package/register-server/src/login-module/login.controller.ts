@@ -6,33 +6,34 @@ import {
   Options,
   Post,
 } from '@nestjs/common';
-import { RegisterService } from './register.service';
-import {
-  RegisterCompleteRequestDto,
-  RegisterStartRequestDto,
-  RegisterStartResponseDto,
-} from './register.dto';
+import { LoginService } from './login.service';
 
-@Controller('register')
-export class RegisterController {
-  constructor(private readonly registerService: RegisterService) {}
+import {
+  LoginCompleteRequestDto,
+  LoginCompleteResponseDto,
+  LoginStartResponseDto,
+} from './login.dto';
+
+@Controller('login')
+export class LoginController {
+  constructor(private readonly loginService: LoginService) {}
 
   @Post('start')
   @Header('Access-Control-Allow-Origin', '*') // FIXME
   @Header('Access-Control-Allow-Headers', 'Content-Type')
-  async registerStart(
-    @Body() body: RegisterStartRequestDto,
-  ): Promise<RegisterStartResponseDto> {
-    return this.registerService.registerStart(body);
+  async loginStart(): Promise<LoginStartResponseDto> {
+    return this.loginService.loginStart();
   }
 
   @Post('complete')
   @Header('Access-Control-Allow-Origin', '*') // FIXME
   @Header('Access-Control-Allow-Headers', 'Content-Type')
-  async registerCompelete(
-    @Body() body: RegisterCompleteRequestDto,
-  ): Promise<boolean> {
-    return this.registerService.registerComplete(body);
+  async loginCompelete(
+    @Body() body: LoginCompleteRequestDto,
+  ): Promise<LoginCompleteResponseDto> {
+    return this.loginService
+      .loginComplete(body)
+      .then((v) => ({ encrypted: v }));
   }
 
   /**

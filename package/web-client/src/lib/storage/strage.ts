@@ -7,6 +7,10 @@ const userNameKey = 'user_name';
 const npubKey = 'npublic_key';
 const nsecKey = 'nsecret_key';
 
+/**
+ * Strage class
+ * TODO: Be all method to static method.
+ */
 export class Strage {
 	setEncryptionKey(enkKey: string): void {
 		this.setToLocal(enkKeyKey, enkKey);
@@ -40,6 +44,10 @@ export class Strage {
 		return this.getFromSession(nsecKey);
 	}
 
+	clearNsec(): void {
+		this.removeFromSession(nsecKey);
+	}
+
 	clearAll(): void {
 		window.sessionStorage.clear();
 		window.localStorage.clear();
@@ -51,6 +59,10 @@ export class Strage {
 
 	private getFromSession(key: string): string | null {
 		return window.sessionStorage.getItem(prefix + key);
+	}
+
+	private removeFromSession(key: string) {
+		window.sessionStorage.removeItem(prefix + key);
 	}
 
 	private setToLocal(key: string, value: string): void {

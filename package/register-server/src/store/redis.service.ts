@@ -22,7 +22,7 @@ export class RedisService {
     );
   }
 
-  getChallenge(id: string): Promise<string> {
+  getChallenge(id: string): Promise<string | null> {
     return this.redis.get(`${KeyPrefix.challenge}:${id}`);
   }
 
@@ -30,7 +30,7 @@ export class RedisService {
     return this.redis.set(`${KeyPrefix.userId}:${id}`, value, 'EX', userIdEx);
   }
 
-  getUserId(id: string): Promise<string> {
+  getUserId(id: string): Promise<string | null> {
     return this.redis.get(`${KeyPrefix.userId}:${id}`);
   }
 

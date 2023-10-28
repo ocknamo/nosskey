@@ -37,7 +37,7 @@ export class RegisterService {
   ) {
     // TODO: Set from config.
     this.f2l = new Fido2Lib({
-      timeout: 180000,
+      timeout: 18000,
       rpId: this.rpId,
       rpName: 'nosskey',
       rpIcon:
@@ -46,7 +46,8 @@ export class RegisterService {
       attestation: 'none',
       cryptoParams: [-7, -257],
       authenticatorAttachment: 'cross-platform',
-      authenticatorRequireResidentKey: false,
+      authenticatorRequireResidentKey: true,
+      authenticatorUserVerification: 'required',
     });
   }
 
@@ -107,6 +108,10 @@ export class RegisterService {
       this.redis.getChallenge(id),
       this.redis.getUserId(id),
     ]);
+
+    if (!userId || !challenge) {
+      throw new HttpException('Login failed.', 400);
+    }
 
     const rawAttestation = {
       ...attestation,

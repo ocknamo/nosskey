@@ -1,4 +1,4 @@
-import { PublicKeyCredentialCreationOptionsJSON, PublicKeyCredentialWithAttestationJSON } from "@github/webauthn-json/dist/types/basic/json";
+import { PublicKeyCredentialCreationOptionsJSON, PublicKeyCredentialRequestOptionsJSON, PublicKeyCredentialWithAssertionJSON, PublicKeyCredentialWithAttestationJSON } from "@github/webauthn-json/dist/types/basic/json";
 
 export interface RegisterStartRequest {
   email: string;
@@ -15,4 +15,19 @@ export interface RegisterStartResponse {
 export interface RegisterCompleteRequest {
   id: string;
   attestation: PublicKeyCredentialWithAttestationJSON;
+}
+
+
+export interface LoginStartResponse {
+  id: string;
+  option: PublicKeyCredentialRequestOptionsJSON;
+};
+
+export interface LoginCompleteRequest {
+  id: string;
+  assertion: PublicKeyCredentialWithAssertionJSON;
+}
+
+export interface LoginCompleteResponse {
+  encrypted: string;
 }

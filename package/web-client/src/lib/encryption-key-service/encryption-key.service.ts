@@ -12,8 +12,8 @@ export class EncryptionKeyService {
 		return [enc, this.ivToBase64url(iv)].join('.');
 	}
 
-	decryptSecretKey(enyptedSecretKey: string, encriptionKey: string): Promise<string> {
-		const [src, ivString] = enyptedSecretKey.split('.');
+	decryptSecretKey(cryptedSecretKey: string, encriptionKey: string): Promise<string> {
+		const [src, ivString] = cryptedSecretKey.split('.');
 
 		const iv = this.base64urlToIv(ivString);
 

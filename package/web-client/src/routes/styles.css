@@ -33,3 +33,14 @@ body {
 button {
 	cursor: pointer;
 }
+
+.submit-button {
+	margin-top: 1em;
+	height: 2em;
+	font-size: 1.4em;
+	background: none;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+	max-width: 360px;
+	min-width: 100px;
+}

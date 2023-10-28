@@ -1,4 +1,17 @@
 <script>
+	import { Login } from "$lib/web-authn/login";
+
+
+	let userName = '';
+	let loading = false;
+	let login;
+
+	async function execLogin() {
+		console.log('Login start!')
+
+		login = new Login();
+		await login.loginStart();
+	}
 </script>
 
 <svelte:head>
@@ -11,9 +24,10 @@
 		Login
 	</h1>
 
-	<h2>
-		TBD
-	</h2>
+	<!-- <form on:submit|preventDefault={submit}>
+		<input value="Login" class="submit-button" type="submit" disabled={ loading } />
+	</form> -->
+	<button class="submit-button" on:click={execLogin}>Login</button>
 
 </section>
 
@@ -21,7 +35,7 @@
 	section {
 		display: flex;
 		flex-direction: column;
-		justify-content: center;
+		justify-content: space-between;
 		align-items: center;
 		flex: 0.6;
 	}
