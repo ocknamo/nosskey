@@ -31,7 +31,9 @@ export class TestDatabase {
   /**
    * getRepository
    */
-  getRepository<T extends ObjectLiteral>(entity: EntityTarget<T>): Repository<T> {
+  getRepository<T extends ObjectLiteral>(
+    entity: EntityTarget<T>,
+  ): Repository<T> {
     return this.dataSource.getRepository(entity);
   }
 

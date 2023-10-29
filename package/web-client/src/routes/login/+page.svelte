@@ -1,9 +1,7 @@
 <script>
+	import { goto } from "$app/navigation";
 	import { Login } from "$lib/web-authn/login";
 
-
-	let userName = '';
-	let loading = false;
 	let login;
 
 	async function execLogin() {
@@ -11,6 +9,10 @@
 
 		login = new Login();
 		await login.loginStart();
+
+		console.log('Login success!')
+
+		goto('/home');
 	}
 </script>
 
@@ -24,9 +26,6 @@
 		Login
 	</h1>
 
-	<!-- <form on:submit|preventDefault={submit}>
-		<input value="Login" class="submit-button" type="submit" disabled={ loading } />
-	</form> -->
 	<button class="submit-button" on:click={execLogin}>Login</button>
 
 </section>

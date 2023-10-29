@@ -5,7 +5,6 @@ import type {
 	PublicKeyCredentialWithAssertionJSON
 } from '@github/webauthn-json/dist/types/basic/json';
 
-import { create, parseCreationOptionsFromJSON } from '@github/webauthn-json/browser-ponyfill';
 import type { LoginCompleteResponse } from 'shared';
 import { Strage } from '$lib/storage/strage';
 import { EncryptionKeyService } from '$lib/encryption-key-service/encryption-key.service';

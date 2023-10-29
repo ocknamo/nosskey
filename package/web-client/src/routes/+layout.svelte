@@ -26,6 +26,7 @@
 		flex: 1;
 		display: flex;
 		flex-direction: column;
+		justify-content: space-between;
 		padding: 1rem;
 		width: 100%;
 		max-width: 64rem;
