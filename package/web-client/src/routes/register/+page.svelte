@@ -8,6 +8,10 @@
 	let userName = '';
 	let encryptionKey = '';
 
+	onMount(async() => {
+		await cratePassword();
+	});
+
 	async function cratePassword() {
 		for (let index = 0; index < 3; index++) {
 			await new Promise((resolve) => {
@@ -90,7 +94,9 @@
 	}
 
 	.change-password-button {
-		border: none;
+		border: 1px solid #AAA;
+		border-radius: 4px;
+		line-height: 30px;
 		background: none;
 		font-size: 1em;
 		margin-top: 8px;

@@ -136,10 +136,7 @@ export class LoginService {
         throw new HttpException('Login failed.', 400);
       });
 
-    console.log('[LoginService]: auth result. ', result);
-
     // Update counter
-
     const counter = result.authnrData.get('counter');
 
     if (typeof counter !== 'number') {
