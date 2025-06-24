@@ -53,7 +53,7 @@
 		<label for="email">email</label>
 			<input bind:value={email} type="email" name="user_email" id="email">
 		<label for="encryptionKey">auto generated password</label>
-			<input class="password-input" bind:value={encryptionKey} type="text" name="password" id="encryptionKey" disabled>
+			<input class="password-input" bind:value={encryptionKey} type="text" name="password" id="encryptionKey" >
 		<span><button class="change-password-button" on:click={cratePassword} type="button">UPDATE</button></span>
 		<input value="Register start!" class="submit-button" type="submit" disabled={ !userName || !email || !encryptionKey  } />
 	</form>

@@ -1,3 +1,5 @@
+## ⛔️ THIS REPO IS DEPRECATED. NOSSKEY IS DEVELOPING NOW AS [NOSSKEY-SDK](https://github.com/ocknamo/nosskey-sdk).
+
 # nosskey
 Nossky challenges better ways to handle Nostr keys
 
